@@ -1,28 +1,32 @@
 import argparse
-import numpy as np
+
 import cv2
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-f", "--file", required=True,
-    help="path to input video file")
-args = vars(ap.parse_args())
+                help="path to input video file")
 
-print('File: ', args['file'])
 
-cap = cv2.VideoCapture(args['file']) # 'fake.avi')
+def play_video(args):
+    print('File: ', args['file'])
 
-while(cap.isOpened()):
-    ret, frame = cap.read()
+    cap = cv2.VideoCapture(args['file'])
 
-    #gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    while (cap.isOpened()):
+        ret, frame = cap.read()
 
-    try:
-        cv2.imshow('frame',frame)
-    except:
-        pass
+        try:
+            cv2.imshow('frame', frame)
+        except:
+            pass
 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
 
-cap.release()
-cv2.destroyAllWindows()
+    cap.release()
+    cv2.destroyAllWindows()
+
+
+if __name__ == '__main__':
+    args = vars(ap.parse_args())
+    play_video(args)

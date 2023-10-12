@@ -2,35 +2,42 @@ import numpy as np
 import argparse
 import cv2
 
+
 ap = argparse.ArgumentParser()
 ap.add_argument("-f", "--file", required=True,
     help="path to output video file")
-args = vars(ap.parse_args())
 
-print('File: ', args['file'])
 
-cap = cv2.VideoCapture(0)
+def record_video():
+    args = vars(ap.parse_args())
 
-# Define the codec and create VideoWriter object
-fourcc = cv2.VideoWriter_fourcc(*'XVID')
-out = cv2.VideoWriter(args['file'], fourcc, 20.0, (640,480)) # 'camera.avi'
+    print('File: ', args['file'])
 
-while(cap.isOpened()):
-    ret, frame = cap.read()
-    if ret==True:
-        # frame = cv2.flip(frame,0)
+    cap = cv2.VideoCapture(0)
 
-        # write the flipped frame
-        out.write(frame)
+    # Define the codec and create VideoWriter object
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    out = cv2.VideoWriter(args['file'],
+                          fourcc, 20.0, (640,480))
 
-        cv2.imshow('frame',frame)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+    while(cap.isOpened()):
+        ret, frame = cap.read()
+        if ret==True:
+            # write the flipped frame
+            out.write(frame)
+
+            cv2.imshow('frame',frame)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+        else:
             break
-    else:
-        break
 
-# Release everything if job is finished
-cap.release()
-out.release()
-cv2.destroyAllWindows()
+    # Release everything if job is finished
+    cap.release()
+    out.release()
+    cv2.destroyAllWindows()
 
+
+if __name__ == '__main__':
+    args = vars(ap.parse_args())
+    record_video(args)
